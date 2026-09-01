@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS note_edges;
+DROP TABLE IF EXISTS notes;
+DROP TABLE IF EXISTS campaign_members;
+DROP TABLE IF EXISTS campaigns;
+DROP TABLE IF EXISTS users;
