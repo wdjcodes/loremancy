@@ -5,9 +5,15 @@ edition = "2024"
 
 [dependencies]
 axum = { version = "0.8.9", features = ["ws", "macros"] }
+dashmap = "6.2.1"
 dotenvy = "0.15.7"
+futures-util = { version = "0.3.34" }
+parking_lot = "0.12.5"
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.151"
 sqlx = { version = "0.9.0", features = ["postgres", "runtime-tokio", "tls-rustls", "chrono"] }
 tokio = { version = "1.53.1", features = ["full"] }
 uuid = { version = "1.26.0", features = ["v4", "serde"] }
+y-sync = { version = "0.4.0", features = ["net"] }
+yrs = "0.17.4"
+yrs-axum = "0.8.2"
