@@ -1,12 +1,15 @@
 <script lang="ts">
 
+	import { app } from '$lib/app.svelte';
+
     let username = $state();
     let password = $state();
 
-    let {user_info = $bindable() } = $props();
-
     async function loginSubmit(event: SubmitEvent) {
         event.preventDefault();
+		if (document.activeElement instanceof HTMLElement) {
+			document.activeElement.blur();
+		}
 
         try {
 			const response = await fetch('/api/login', {
@@ -16,7 +19,7 @@
 			});
 
 			if (response.ok) {
-                user_info = await response.json()
+                app.user = await response.json()
 			}
 		} catch (error) {
 			console.log(error)

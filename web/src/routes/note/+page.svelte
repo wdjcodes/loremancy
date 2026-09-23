@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { WebsocketProvider } from 'y-websocket';
 	import * as Y from 'yjs';
-	import SimpleEditor from '$lib/tiptap/SimpleEditor.svelte';
+	import SimpleEditor from '$lib/components/tiptap/SimpleEditor.svelte';
 
 	let ydoc: Y.Doc | undefined = $state();
 	let provider: WebsocketProvider | undefined = $state();

@@ -3,9 +3,12 @@ use std::{
     sync::{Arc, Weak},
 };
 
-use axum::{Router, routing::{get, post}};
+use axum::{
+    Router,
+    routing::{get, post},
+};
 use axum_login::{
-    AuthManagerLayerBuilder,
+    AuthManagerLayerBuilder, login_required,
     tower_sessions::{Expiry, SessionManagerLayer},
 };
 use dashmap::DashMap;
@@ -18,8 +21,12 @@ use y_sync::net::BroadcastGroup;
 mod handlers;
 use handlers::collaboration;
 
-use crate::handlers::auth::{self, AppBackend};
+use crate::handlers::{
+    auth::{self, AppBackend},
+    campaign,
+};
 
+mod stores;
 pub struct Room {
     pub tx: tokio::sync::broadcast::Sender<Vec<u8>>,
     pub doc: RwLock<yrs::Doc>,
@@ -56,12 +63,19 @@ async fn main() {
         rooms: DashMap::new(),
     });
 
+    let protected_routes = Router::new()
+        .route("/api/campaigns", get(campaign::get_users_campaigns))
+        .route("/api/campaign", post(campaign::create_campaign))
+        // The login_required macro blocks requests without a valid session cookie
+        .route_layer(login_required!(AppBackend, login_url = "/api/auth/login"));
+
     // build our application with a route
     let app = Router::new()
         .route("/api/register", post(auth::register))
         .route("/api/login", post(auth::login))
         .route("/api/logout", post(auth::logout))
         .route("/ws/note/{note_id}", get(collaboration::ws_handler))
+        .merge(protected_routes)
         .layer(auth_layer)
         .with_state(state);
 
